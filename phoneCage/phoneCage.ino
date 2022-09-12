@@ -1,5 +1,6 @@
 #include "timeManager.h"
 #include <CapacitiveSensor.h>
+#include <Adafruit_NeoPixel.h>
 
 OutputTimer ButtonTimer;
 OutputTimer WorkTimer;
@@ -12,7 +13,10 @@ OutputTimer WorkTimer;
 // PINS HERE
 const int buttonPin = 8;  
 const int limitSwitchPin = 10; 
+const int neoPixelPin = 11;
+
 CapacitiveSensor   cs_4_2 = CapacitiveSensor(4,2);  
+static Adafruit_NeoPixel pixels(16, neoPixelPin, NEO_GRB + NEO_KHZ800);
 
 int buttonState = 0;   
 
@@ -24,6 +28,13 @@ void setup() {
   pinMode(limitSwitchPin, INPUT);
   Serial.begin(9600);
   cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF); 
+  pixels.begin();
+  pixels.show();
+  pixels.setBrightness(50);
+  for(int i=0; i<16; i++) {
+    pixels.setPixelColor(i, pixels.Color(255, 0, 0, pixels.gamma8(50)));
+  }
+  pixels.show();
 }
 
 void loop() {
